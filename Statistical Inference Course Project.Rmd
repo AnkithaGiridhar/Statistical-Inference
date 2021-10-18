@@ -2,7 +2,7 @@
 title: "Statistical Inference Course Project Part 1"
 author: "Ankitha Giridhar"
 date: "18/10/2021"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
