@@ -1,0 +1,48 @@
+---
+title: "Statistical Inference Course Project Part 2"
+author: "Ankitha Giridhar"
+date: "18/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Overview
+The second part of the Statistical Inference course project is explored here. A basic exploratory data analysis is done on the ToothGrowth data, followed by hypothesis testing. The conclusions from the latter are presented at the end.
+
+### EDA
+The data is examined using the summary() and head() functions. 
+
+```{r start}
+data("ToothGrowth")
+summary(ToothGrowth)
+head(ToothGrowth)
+```
+There are only three columns in the data - the length, the supplement and the dose. The dose and supplement columns are further looked into for unique values.
+```{r unique}
+unique(ToothGrowth$dose)
+unique(ToothGrowth$supp)
+````
+There are three unique dose values, while the supplement column is binary. The data is visualised on these categories using the ggplot library.
+```{r plot1}
+library(ggplot2)
+p <- ggplot(ToothGrowth, aes(x=dose, y=len)) + geom_boxplot(aes(fill=factor(dose))) + geom_point() + facet_grid(.~supp) + ggtitle("Tooth Growth by Dosage for Each Supplement")
+p
+```
+In both cases, higher doses correlate with greater lenggth. For each dosage, OJ seems to have higher lengths than VC.
+
+### Hypothesis Testing
+The hypotheses are that orange juice (OJ) has a higher impact than ascorbic acid (VC) and vice versa. These are tested with the t test.
+
+```{r ttest1}
+t.test(len ~ supp, data=ToothGrowth)
+```
+The p value was greater than 0.5, and this test is inconclusive, as the null hypothesis cannot be rejected. Moreover, the confidence interval includes 0.
+The test is tried again with doses less than 2, the highest dose in the data.
+```{r ttest2}
+t.test(len ~ supp, data=ToothGrowth[ToothGrowth$dose<2,])
+```
+Here, the the p value is ~0.004, i.e. close to 0, and the confidence interval does not include 0. 
+### Conclusion
+Therefore, it can be concluded that for dosages less than, NOT equal to 2, the supplement has an effect on the tooth growth of guinea pigs, with orange juice resulting in longer teeth as per the means.
